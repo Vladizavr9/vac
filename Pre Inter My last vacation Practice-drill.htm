@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting Flight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dialog-line-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .dialog-line {
+            margin-bottom: 0px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+            width: 58%;
+            box-sizing: border-box;
+        }
+
+        .dialog-line:hover {
+            background-color: #e9ecef;
+        }
+
+        .traveler {
+            background-color: #ccf0ff; /* Light Blue */
+        }
+
+        .airport-staff {
+            background-color: #ffe6cc; /* Light Orange */
+        }
+
+        b {
+            font-weight: bold;
+        }
+
+        .input-field {
+            width: 38%;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            resize: vertical;
+            height: auto;
+        }
+
+        .input-field {
+            word-wrap: break-word;
+        }
+
+        #restart-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px; /* Space above the button */
+            align-self: center; /* Center the button horizontally */
+        }
+
+        #restart-button:hover {
+            background-color: #3e8e41;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My last vacation</h1>
+        <div id="dialog">
+            <!-- Dialog lines and inputs will be inserted here by JavaScript -->
+        </div>
+        <button id="restart-button">Restart</button>
+        <audio id="audioPlayer" controls style="width: 100%;">
+            <source src="TTS_577449.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const dialogData = [
+            {
+                speaker: "Путешественник",
+                russian: "В сентябре я вернулась из прекрасного отпуска и не могу перестать об этом думать.",
+                english: "In September, I came back from a great vacation and can't stop thinking about it.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Это была поездка, полная веселья и отдыха.",
+                english: "It was a trip full of fun and relaxation.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "Мы ездили на остров Хилтон-Хед в штате Южная Каролина, США.",
+                english: "We went to Hilton Head Island in the state of South Carolina, USA.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Он известен своими пляжами Атлантического океана.",
+                english: "It's known for its Atlantic Ocean beaches.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "Мы остановились в красивом большом доме у океана.",
+                english: "We stayed in a beautiful, big house by the ocean.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Каждое утро мы ходили на пляж, чтобы посмотреть на волны и восход солнца.",
+                english: "Every morning, we went to the beach to watch the waves and sunrise.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "Однажды, гуляя по пляжу, мы увидели стаю дельфинов.",
+                english: "One day, while walking on the beach, we saw a school of dolphins.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Это было впечатляюще.",
+                english: "It was impressive.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "На завтрак мы ходили в аутентичное местное кафе, где ели вкусный торт и пили кофе.",
+                english: "For breakfast, we went to an authentic local café, where we had a delicious cake and coffee.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "После этого мы посетили местный рынок. Я купила пару сувениров для моей семьи.",
+                english: "After that, we visited the local market. I bought some souvenirs for my family.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "Мы также плавали в океане.",
+                english: "We also swam in the ocean.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Вода была кристально чистой – это было совершенно потрясающе.",
+                english: "The water was crystal clear – it was absolutely stunning.",
+                className: "airport-staff",
+                audio: ""
+            },
+             {
+                speaker: "Путешественник",
+                russian: "Позже мы исследовали остров на велосипедах.",
+                english: "Later, we explored the island on bikes.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Мы проехали по узким дорогам в парке и восхищались высокими деревьями.",
+                english: "We rode through narrow roads in the park and admired the tall trees.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "Мы попробовали традиционную еду рыбаков в маленьком кафе. Это было восхитительно.",
+                english: "We tried traditional fishermen's food at a small café. It tasted amazing.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "Вечером мы наблюдали закат с вершины холма и катались на велосипедах по песчаному пляжу.",
+                english: "In the evening, we watched the sunset from a hilltop and rode our bikes along the sandy beach.",
+                className: "airport-staff",
+                audio: ""
+            },
+            {
+                speaker: "Путешественник",
+                russian: "Это был один из самых красивых видов.",
+                english: "It was one of the most beautiful views.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "В последний день мы посетили большой исторический маяк.",
+                english: "On the last day, we visited a large historical lighthouse.",
+                className: "airport-staff",
+                audio: ""
+            },
+             {
+                speaker: "Путешественник",
+                russian: "Я восхищалась зданием.",
+                english: "I admired the building.",
+                className: "traveler",
+                audio: ""
+            },
+            {
+                speaker: "Сотрудник аэропорта",
+                russian: "После этого мы собрали вещи и попрощались с океаном.",
+                english: "After that, we packed our bags and said goodbye to the ocean.",
+                className: "airport-staff",
+                audio: ""
+            },
+             {
+                speaker: "Путешественник",
+                russian: "Когда я вернулась домой, я почувствовала себя счастливой и расслабленной.",
+                english: "When I came back home, I felt happy and relaxed.",
+                className: "traveler",
+                audio: ""
+            },
+             {
+                speaker: "Сотрудник аэропорта",
+                russian: "Я уже начала планировать свою следующую поездку.",
+                english: "I've already started planning my next trip.",
+                className: "airport-staff",
+                audio: ""
+            },
+        ];
+
+        const dialogContainer = document.getElementById('dialog');
+        const restartButton = document.getElementById('restart-button');
+        let isRussian = true;
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        function createDialogLine(lineData) {
+            const lineContainer = document.createElement('div');
+            lineContainer.classList.add('dialog-line-container');
+
+            const line = document.createElement('div');
+            line.classList.add('dialog-line', lineData.className);
+            line.dataset.speaker = lineData.speaker;
+            line.dataset.russian = lineData.russian;
+            line.dataset.english = lineData.english;
+            line.textContent = lineData.russian;
+            line.addEventListener('click', toggleLanguage);
+
+            const inputField = document.createElement('textarea');
+            inputField.classList.add('input-field');
+            inputField.placeholder = "";
+
+            lineContainer.appendChild(line);
+            lineContainer.appendChild(inputField);
+
+            return lineContainer;
+        }
+
+
+        function toggleLanguage(event) {
+            const line = event.currentTarget;
+            if (line.textContent === line.dataset.russian) {
+                line.innerHTML = line.dataset.english.replace(/\b\w+\b/g, '<b>$&</b>'); // Bold English
+            } else {
+                line.textContent = line.dataset.russian;
+            }
+        }
+
+
+        function restartDialog() {
+            // Remove existing dialog lines
+            while (dialogContainer.firstChild) {
+                dialogContainer.removeChild(dialogContainer.firstChild);
+            }
+
+            // Determine which language to use
+            const languageToUse = isRussian ? 'russian' : 'english';
+
+            // Populate the dialog with the selected language
+            dialogData.forEach(lineData => {
+                const lineContainer = createDialogLine(lineData);
+                dialogContainer.appendChild(lineContainer);
+            });
+
+            // Toggle the flag
+            isRussian = !isRussian;
+        }
+
+
+        // Initial dialog population
+        dialogData.forEach(lineData => {
+            const lineContainer = createDialogLine(lineData);
+            dialogContainer.appendChild(lineContainer);
+        });
+
+        // Add event listener to the restart button
+        restartButton.addEventListener('click', restartDialog);
+    </script>
+</body>
+</html>
